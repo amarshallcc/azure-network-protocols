@@ -25,33 +25,87 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 
 <h2>High-Level Steps</h2>
 
-- Step 1
-- Step 2
-- Step 3
-- Step 4
+- Dealing with account lockouts
+- Configuring Group Policy for Account Lockout
+- Enabling and Disabling Accounts
+- Observing Logs
 
 <h2>Actions and Observations</h2>
 
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
+---
 
+### **1. Dealing with Account Lockouts**  
 <p>
 <img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
+What it does: This step simulates a scenario where a user enters the wrong password multiple times, leading to an account lockout.  
 
+**Purpose:** Organizations enforce account lockouts to protect against unauthorized access and brute-force attacks. By testing this, administrators can understand how lockouts work and how to resolve them.  
+
+**Steps:**  
+- **Log into DC-1 (Domain Controller).**  
+- **Pick a random user account created previously.**  
+- **Attempt to log in 10 times with a bad password.**  
+  - This simulates a user forgetting their password or an attacker trying to guess it.  
+
+---
+
+### 2. Configuring Group Policy for Account Lockout 
 <p>
 <img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
+What it does: This step modifies security settings so that an account locks out after five incorrect login attempts instead of the default settings.  
+
+**Purpose:** Setting a limit on failed login attempts helps prevent brute-force attacks while maintaining security for legitimate users.  
+
+**Steps:**  
+- **Configure the "Account Lockout Threshold" policy in Group Policy to lock accounts after five failed attempts.**  
+- **Attempt to log in six times with a bad password.**  
+  - The account should now be locked due to the new policy.  
+- **Observe that the account is locked in Active Directory.**  
+  - This confirms that the policy is working as expected.  
+- **Unlock the account and reset the password.**  
+  - This step ensures that an administrator can restore access when needed.  
+- **Attempt to log in with the new password.**  
+  - Verifies that the account is functioning again.  
+
+---
+
+### **3. Enabling and Disabling Accounts**  
 <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 </p>
-<br />
+What it does: This step demonstrates how administrators can disable and re-enable user accounts in Active Directory.  
+
+**Purpose:** Disabling accounts is useful when employees leave the company or need temporary access restrictions without deleting their accounts.  
+
+**Steps:**  
+- **Disable the same user account in Active Directory.**  
+- **Attempt to log in with it and observe the error message.**  
+  - Confirms that disabled accounts cannot be accessed.  
+- **Re-enable the account in Active Directory.**  
+- **Attempt to log in again.**  
+  - Verifies that the account is now active and accessible.  
+
+---
+
+### **4. Observing Logs**  
+<p>
+<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+</p>
+What it does: This step involves checking system logs on both the Domain Controller and the client machine to track authentication events.  
+
+**Purpose:** Logs help administrators monitor failed login attempts, security threats, and troubleshooting issues related to user authentication.  
+
+**Steps:**  
+- **Observe the security logs in the Domain Controller.**  
+  - This shows details about failed login attempts, account lockouts, and password resets.  
+- **Observe the logs on the client machine.**  
+  - Helps verify if the client machine properly logged authentication events.  
+
+---
+
+
+
+
+
