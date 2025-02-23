@@ -29,8 +29,6 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 
 ---
 
-Here’s a simple explanation of each major step, written at an 11th-grade level:  
-
 ### **Part 1: Creating Virtual Machines in Azure**  
 **Purpose:** Set up two virtual machines (VMs) in the cloud so we can later observe how they communicate with each other.  
 
@@ -58,19 +56,36 @@ Here’s a simple explanation of each major step, written at an 11th-grade level
 
 1. **Connect to the Windows 10 VM via Remote Desktop**  
    - Remote Desktop lets us control the Windows VM from our own computer.  
-   - If using a Mac, we need to install Microsoft Remote Desktop to connect.  
+   - If using a Mac, we need to install Microsoft Remote Desktop to connect.
+  
+   ![image](https://github.com/user-attachments/assets/1a046cbd-a0b3-4c96-9799-47190e6eac64)
+
 
 2. **Install Wireshark on the Windows VM**  
    - Wireshark is a tool that captures and shows network traffic.  
    - It helps us see what happens when computers send messages to each other.  
 
+   ![image](https://github.com/user-attachments/assets/586c11dd-3105-439f-a720-534efe2b5b04)
+
 3. **Filter for ICMP Traffic in Wireshark**  
-   - ICMP (Internet Control Message Protocol) is the type of traffic used for **ping** commands.  
-   - Filtering for ICMP in Wireshark allows us to focus on just those messages.  
+   - ICMP (Internet Control Message Protocol) is the type of traffic used for **ping** commands.
+  
+  ![image](https://github.com/user-attachments/assets/93407d7c-24a4-49bc-926f-164ee32ca5c2)
 
-4. **Ping the Linux VM from the Windows VM**  
-   - We find the Linux VM's private IP address and use a **ping** command from the Windows VM.  
-   - In Wireshark, we can observe the request being sent and the reply coming back.  
-   - This confirms that the two VMs are communicating over the network.  
+   - Filtering for ICMP in Wireshark allows us to focus on just those messages.
+  
+4. **Ping the Linux VM from the Windows VM**
 
-This lab helps understand cloud networking, virtual machines, and how computers talk to each other over a network.
+   - We find the Linux VM's private IP address and use a **ping** command from the Windows VM.
+  
+  ![image](https://github.com/user-attachments/assets/2420d000-7fc9-4b5d-9d45-0f90ce1f8cf2)
+
+   - In Wireshark, we can observe the request being sent and the reply coming back.
+  
+   ![image](https://github.com/user-attachments/assets/2b69c645-8347-4366-b325-0fe5a9d3bd9d)
+
+   - This confirms that the two VMs are communicating over the network.
+     
+   ![image](https://github.com/user-attachments/assets/ae09ec6b-fff1-4337-9623-e21a41a2f620)
+
+---
