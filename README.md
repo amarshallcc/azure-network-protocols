@@ -2,7 +2,7 @@
 <img src="https://i.imgur.com/Ua7udoS.png" alt="Traffic Examination"/>
 </p>
 
-<h1>Network Security Groups (NSGs) and Inspecting Traffic Between Azure Virtual Machines</h1>
+<h1>Inspecting Traffic Between Azure Virtual Machines</h1>
 In this tutorial, we observe various network traffic to and from Azure Virtual Machines with Wireshark as well as experiment with Network Security Groups. <br />
 
 <h2>Environments and Technologies Used</h2>
@@ -10,7 +10,7 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 - Microsoft Azure (Virtual Machines/Compute)
 - Remote Desktop
 - Various Command-Line Tools
-- Various Network Protocols (SSH, RDH, DNS, HTTP/S, ICMP)
+- Various Network Protocols (ICMP)
 - Wireshark (Protocol Analyzer)
 
 <h2>Operating Systems Used </h2>
@@ -20,109 +20,57 @@ In this tutorial, we observe various network traffic to and from Azure Virtual M
 
 <h2>High-Level Steps</h2>
 
-- Dealing with account lockouts
-- Configuring Group Policy for Account Lockout
-- Enabling and Disabling Accounts
-- Observing Logs
+- Create virtual machines in Azure
+- Connect to Windows VM
+- Install and use wireshark
+- Test Network Communication
 
 <h2>Actions and Observations</h2>
 
 ---
 
-### **1. Dealing with Account Lockouts**  
+Here’s a simple explanation of each major step, written at an 11th-grade level:  
 
-What it does: This step simulates a scenario where a user enters the wrong password multiple times, leading to an account lockout.  
+### **Part 1: Creating Virtual Machines in Azure**  
+**Purpose:** Set up two virtual machines (VMs) in the cloud so we can later observe how they communicate with each other.  
 
-**Purpose:** Organizations enforce account lockouts to protect against unauthorized access and brute-force attacks. By testing this, administrators can understand how lockouts work and how to resolve them.  
+1. **Create a Resource Group**  
+   - A resource group is like a folder that keeps all related resources together in Azure.  
+   - This helps organize and manage everything easily.  
 
-**Steps:**  
-- **Log into DC-1 (Domain Controller).**  
-- **Pick a random user account created previously.**  
-- **Attempt to log in 10 times with a bad password.**  
-  - This simulates a user forgetting their password or an attacker trying to guess it.
- 
-![image](https://github.com/user-attachments/assets/7c5b592c-ffa8-446c-82f6-4fa76962e9e9)
+2. **Create a Windows 10 Virtual Machine (VM)**  
+   - A virtual machine is a computer that runs in the cloud instead of on your desk.  
+   - While setting it up, we tell Azure to place it in the resource group we just created.  
+   - It also creates a new virtual network (VNet) so that devices in this network can talk to each other.  
 
-![image](https://github.com/user-attachments/assets/a7e6f10f-a7c0-437c-a9ac-5b00a84d48af)
+3. **Create a Linux (Ubuntu) VM**  
+   - We add another computer, this time using Linux (Ubuntu), which is a different operating system from Windows.  
+   - It must be placed in the same resource group and virtual network as the Windows VM.  
+   - This setup allows the two VMs to communicate later in Part 2.  
 
----
-
-### 2. Configuring Group Policy for Account Lockout 
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-What it does: This step modifies security settings so that an account locks out after five incorrect login attempts instead of the default settings.  
-
-**Purpose:** Setting a limit on failed login attempts helps prevent brute-force attacks while maintaining security for legitimate users.  
-
-**Steps:**  
-- **Configure the "Account Lockout Threshold" policy in Group Policy to lock accounts after five failed attempts.**  
-- **Attempt to log in six times with a bad password.**  
-  - The account should now be locked due to the new policy.  
-- **Observe that the account is locked in Active Directory.**  
-  - This confirms that the policy is working as expected.  
-- **Unlock the account and reset the password.**  
-  - This step ensures that an administrator can restore access when needed.  
-- **Attempt to log in with the new password.**  
-  - Verifies that the account is functioning again.  
+4. **Confirm Both VMs Are in the Same Virtual Network**  
+   - This ensures the two VMs can "see" each other when we test communication.  
 
 ---
 
-### **3. Enabling and Disabling Accounts**  
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-What it does: This step demonstrates how administrators can disable and re-enable user accounts in Active Directory.  
+### **Part 2: Observing ICMP Traffic**  
+**Purpose:** Use networking tools to watch data travel between the two virtual machines.  
 
-**Purpose:** Disabling accounts is useful when employees leave the company or need temporary access restrictions without deleting their accounts.  
+1. **Connect to the Windows 10 VM via Remote Desktop**  
+   - Remote Desktop lets us control the Windows VM from our own computer.  
+   - If using a Mac, we need to install Microsoft Remote Desktop to connect.  
 
-**Steps:**  
-- **Disable the same user account in Active Directory.**  
-- **Attempt to log in with it and observe the error message.**  
-  - Confirms that disabled accounts cannot be accessed.
- 
-Checking user login created in active directory
-![image](https://github.com/user-attachments/assets/6e4aaa33-5499-41dd-8d83-8fdb010eb030)
+2. **Install Wireshark on the Windows VM**  
+   - Wireshark is a tool that captures and shows network traffic.  
+   - It helps us see what happens when computers send messages to each other.  
 
-- **Re-enable the account in Active Directory.**  
-- **Attempt to log in again.**  
-  - Verifies that the account is now active and accessible.  
+3. **Filter for ICMP Traffic in Wireshark**  
+   - ICMP (Internet Control Message Protocol) is the type of traffic used for **ping** commands.  
+   - Filtering for ICMP in Wireshark allows us to focus on just those messages.  
 
-![image](https://github.com/user-attachments/assets/a349fceb-3829-4042-8184-b8b5df3dc379)
+4. **Ping the Linux VM from the Windows VM**  
+   - We find the Linux VM's private IP address and use a **ping** command from the Windows VM.  
+   - In Wireshark, we can observe the request being sent and the reply coming back.  
+   - This confirms that the two VMs are communicating over the network.  
 
----
-
-### **4. Observing Logs**  
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-This step involves checking system logs on both the Domain Controller and the client machine to track authentication events. 
-
-Observe that the account has been locked out within Active Directory
-![image](https://github.com/user-attachments/assets/cc0a4d82-0924-4771-b185-99eb41bc6498)
-
-**Purpose:** Logs help administrators monitor failed login attempts, security threats, and troubleshooting issues related to user authentication.  
-
-**Steps:**  
-- **Observe the security logs in the Domain Controller.**  
-  - This shows details about failed login attempts, account lockouts, and password resets.
- 
-![image](https://github.com/user-attachments/assets/bf732a9f-9478-4eb0-9ca2-b3561ac675a2)
-
-- **Observe the logs on the client machine.**  
-  - Helps verify if the client machine properly logged authentication events.  
-
----
-
-
-Create Users
-![image](https://github.com/user-attachments/assets/736f60ab-6be7-4d6c-bdd6-0e00e2e6f095)
-Checking user login created in active directory
-![image](https://github.com/user-attachments/assets/6e4aaa33-5499-41dd-8d83-8fdb010eb030)
-
-
-
-
-
-
-
+This lab helps understand cloud networking, virtual machines, and how computers talk to each other over a network.
